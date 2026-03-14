@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flashcard App</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 1.25rem;
+      color: #555;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* Card flip container */
+    .card-scene {
+      width: 560px;
+      max-width: 100%;
+      height: 300px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+
+    .card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.5s ease;
+    }
+
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .card-face--back {
+      transform: rotateY(180deg);
+      background: #1a1a2e;
+      color: white;
+    }
+
+    .card-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.4;
+      margin-bottom: 1rem;
+    }
+
+    .card-text {
+      font-size: 1.15rem;
+      line-height: 1.6;
+    }
+
+    .card-hint {
+      font-size: 0.8rem;
+      opacity: 0.4;
+      margin-top: 1.5rem;
+    }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      gap: 1rem;
+    }
+
+    button {
+      padding: 0.6rem 1.4rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    button:active { transform: scale(0.97); }
+
+    #btn-next {
+      background: #4f46e5;
+      color: white;
+    }
+    #btn-next:hover { background: #4338ca; }
+
+    #btn-flip {
+      background: #e5e7eb;
+      color: #111;
+    }
+    #btn-flip:hover { background: #d1d5db; }
+
+    /* Counter */
+    #counter {
+      font-size: 0.85rem;
+      color: #999;
+    }
+
+    /* Error state */
+    #error {
+      color: #dc2626;
+      font-size: 0.9rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Flashcards</h1>
+
+  <p id="error">Could not load flashcard data. Make sure you are running this via a local server.</p>
+
+  <div class="card-scene" id="card-scene" onclick="flipCard()">
+    <div class="card" id="card">
+      <div class="card-face card-face--front">
+        <div class="card-label">Question</div>
+        <p class="card-text" id="question-text">Loading…</p>
+        <p class="card-hint">Click to reveal answer</p>
+      </div>
+      <div class="card-face card-face--back">
+        <div class="card-label">Answer</div>
+        <p class="card-text" id="answer-text"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="btn-flip" onclick="flipCard()">Flip</button>
+    <button id="btn-next" onclick="nextCard()">Next card →</button>
+  </div>
+
+  <p id="counter"></p>
+
+  <script>
+    let cards = [];
+    let currentCard = null;
+
+    async function loadCards() {
+      try {
+        const response = await fetch('./data/seed.json');
+        if (!response.ok) throw new Error('Network response was not ok');
+        cards = await response.json();
+        showRandomCard();
+      } catch (err) {
+        document.getElementById('error').style.display = 'block';
+        document.getElementById('card-scene').style.display = 'none';
+        document.querySelector('.controls').style.display = 'none';
+        console.error('Failed to load seed.json:', err);
+      }
+    }
+
+    function showRandomCard() {
+      // Pick a random card, avoiding repeating the current one if possible
+      let available = cards;
+      if (cards.length > 1 && currentCard) {
+        available = cards.filter(c => c.id !== currentCard.id);
+      }
+      currentCard = available[Math.floor(Math.random() * available.length)];
+
+      document.getElementById('question-text').textContent = currentCard.question;
+      document.getElementById('answer-text').textContent = currentCard.answer;
+      document.getElementById('counter').textContent =
+        `Card ${cards.indexOf(currentCard) + 1} of ${cards.length}`;
+
+      // Reset flip state
+      document.getElementById('card').classList.remove('flipped');
+    }
+
+    function flipCard() {
+      document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+      showRandomCard();
+    }
+
+    loadCards();
+  </script>
+
+</body>
+</html>

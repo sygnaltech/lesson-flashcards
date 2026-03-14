@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "question": "What is a prompt?",
+    "answer": "A prompt is the input text you give to an AI model to instruct it on what to do or generate."
+  },
+  {
+    "id": 2,
+    "question": "Define hallucination in the context of AI.",
+    "answer": "Hallucination is when an AI model generates information that sounds plausible but is factually incorrect or made up."
+  },
+  {
+    "id": 3,
+    "question": "What is a large language model (LLM)?",
+    "answer": "An LLM is a type of AI trained on large amounts of text data that can understand and generate human language."
+  },
+  {
+    "id": 4,
+    "question": "What does 'temperature' control in an AI model?",
+    "answer": "Temperature controls the randomness of the model's output. Higher values produce more creative/varied responses; lower values produce more predictable ones."
+  },
+  {
+    "id": 5,
+    "question": "What is prompt engineering?",
+    "answer": "Prompt engineering is the practice of carefully crafting inputs to an AI model to reliably get useful, accurate, or specific outputs."
+  },
+  {
+    "id": 6,
+    "question": "What is a system prompt?",
+    "answer": "A system prompt is an instruction given to an AI before the conversation begins, used to set its role, behaviour, or constraints."
+  },
+  {
+    "id": 7,
+    "question": "What is retrieval-augmented generation (RAG)?",
+    "answer": "RAG is a technique where relevant documents are retrieved from a knowledge base and included in the prompt so the AI can answer questions grounded in that data."
+  },
+  {
+    "id": 8,
+    "question": "What is a token in the context of LLMs?",
+    "answer": "A token is the basic unit of text that an LLM processes — roughly a word or word fragment. Models have a maximum token limit per request."
+  },
+  {
+    "id": 9,
+    "question": "What is 'vibe coding'?",
+    "answer": "Vibe coding is an informal term for prompting an AI to write code without a clear plan or specification, relying on instinct and iteration rather than structure."
+  },
+  {
+    "id": 10,
+    "question": "What is the Analyze → Plan → Prompt loop?",
+    "answer": "A structured workflow for AI-assisted development: first analyse the requirements, then plan the implementation, then prompt the AI with that context to get reliable results."
+  }
+]
